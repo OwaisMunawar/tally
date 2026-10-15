@@ -1,0 +1,17 @@
+# The Xcode project is generated from project.yml by XcodeGen (`xcodegen generate`).
+*.xcodeproj
+*.xcworkspace
+
+# Build products
+build/
+DerivedData/
+.build/
+.swiftpm/
+*.xcresult
+
+# User state
+xcuserdata/
+*.xcuserstate
+
+# macOS
+.DS_Store
