@@ -56,7 +56,8 @@ jobs:
           echo "$RUNNER_TEMP/xcodegen/bin" >> "$GITHUB_PATH"
       - name: Install the Metal toolchain
         # Xcode 26 ships the Metal compiler as a separate component; the holographic shader needs it.
-        run: xcodebuild -showComponent MetalToolchain | grep -q "Status: installed" || xcodebuild -downloadComponent MetalToolchain
+        run: |
+          xcodebuild -showComponent MetalToolchain | grep -q "Status: installed" || xcodebuild -downloadComponent MetalToolchain
       - name: Generate project
         run: xcodegen generate
       - name: Pick an iOS 26.5 simulator
