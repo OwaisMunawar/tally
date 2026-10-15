@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  XCODE_VERSION: "26.6"
+  SWIFTLINT_VERSION: "0.65.1"
+  XCODEGEN_VERSION: "2.46.0"
+
+jobs:
+  lint:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Install SwiftLint ${{ env.SWIFTLINT_VERSION }}
+        run: |
+          curl -sSL -o swiftlint.zip "https://github.com/realm/SwiftLint/releases/download/${SWIFTLINT_VERSION}/portable_swiftlint.zip"
+          unzip -q swiftlint.zip -d "$RUNNER_TEMP/swiftlint"
+          echo "$RUNNER_TEMP/swiftlint" >> "$GITHUB_PATH"
+      - name: Lint
+        run: swiftlint lint --strict --reporter github-actions-logging
+
+  packages:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: maxim-lobanov/setup-xcode@v1.7.0
+        with:
+          xcode-version: ${{ env.XCODE_VERSION }}
+      - name: swift test
+        run: |
+          for package in TallyCore TallyData TallyIntelligence; do
+            echo "::group::$package"
+            swift test --package-path "Packages/$package"
+            echo "::endgroup::"
+          done
+
+  app:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: maxim-lobanov/setup-xcode@v1.7.0
+        with:
+          xcode-version: ${{ env.XCODE_VERSION }}
+      - name: Install XcodeGen ${{ env.XCODEGEN_VERSION }}
+        run: |
+          curl -sSL -o xcodegen.zip "https://github.com/yonaskolb/XcodeGen/releases/download/${XCODEGEN_VERSION}/xcodegen.zip"
+          unzip -q xcodegen.zip -d "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/xcodegen/bin" >> "$GITHUB_PATH"
+      - name: Install the Metal toolchain
+        # Xcode 26 ships the Metal compiler as a separate component; the holographic shader needs it.
+        run: xcodebuild -showComponent MetalToolchain | grep -q "Status: installed" || xcodebuild -downloadComponent MetalToolchain
+      - name: Generate project
+        run: xcodegen generate
+      - name: Pick an iOS 26.5 simulator
+        id: sim
+        run: |
+          udid=$(xcrun simctl list devices available --json \
+            | jq -r '[.devices | to_entries[] | select(.key | test("iOS-26-5")) | .value[] | select(.name | startswith("iPhone"))][0].udid')
+          echo "Using simulator $udid"
+          echo "udid=$udid" >> "$GITHUB_OUTPUT"
+      - name: Build and test
+        run: |
+          set -o pipefail
+          mkdir -p build
+          xcodebuild \
+            -scheme Tally \
+            -destination "platform=iOS Simulator,id=${{ steps.sim.outputs.udid }}" \
+            -derivedDataPath build/DerivedData \
+            -resultBundlePath build/Tally.xcresult \
+            build test | tee build/xcodebuild.log | grep -E "error:|warning:|Test run|\*\* (BUILD|TEST)"
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: xcresult
+          path: build/Tally.xcresult
