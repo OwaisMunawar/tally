@@ -49,6 +49,7 @@ targets:
       - package: TallyData
       - package: TallyIntelligence
       - package: TallyUI
+      - target: TallyWidgets
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.owaismunawar.tally
@@ -78,6 +79,38 @@ targets:
               - tally
     entitlements:
       path: App/Tally.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.owaismunawar.tally
+
+  TallyWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - Widgets
+      - Shared
+    dependencies:
+      - package: TallyCore
+      - package: TallyData
+      - package: TallyUI
+      - sdk: WidgetKit.framework
+      - sdk: SwiftUI.framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.owaismunawar.tally.widgets
+        PRODUCT_NAME: TallyWidgets
+        APPLICATION_EXTENSION_API_ONLY: YES
+        SKIP_INSTALL: YES
+    info:
+      path: Widgets/Info.plist
+      properties:
+        CFBundleDisplayName: Tally Widgets
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: Widgets/TallyWidgets.entitlements
       properties:
         com.apple.security.application-groups:
           - group.com.owaismunawar.tally
