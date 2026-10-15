@@ -33,7 +33,26 @@ enum Fixture {
         return value
     }
 
+    static let account = Account(name: "Checking", kind: .bank, currency: .usd)
+    static let euroAccount = Account(name: "Euro Cash", kind: .cash, currency: .eur)
+
     static func rates() throws -> ExchangeRateTable {
         try ExchangeRateTable(baseCurrency: .usd, rates: [.eur: decimal("1.10"), .gbp: decimal("1.25")])
+    }
+
+    static func spend(
+        _ payee: String,
+        _ minorUnits: Int64,
+        _ category: TransactionCategory,
+        on date: Date,
+        account: Account = account
+    ) -> LedgerTransaction {
+        LedgerTransaction(
+            accountID: account.id,
+            payee: payee,
+            amount: Money(minorUnits: minorUnits, currency: account.currency),
+            category: category,
+            date: date
+        )
     }
 }
