@@ -174,7 +174,7 @@ private struct GroundingBadge: View {
 
     var body: some View {
         if report.isGrounded {
-            Label(report.verified.isEmpty ? "No figures to check" : "\(report.verified.count) \(report.verified.count == 1 ? "figure" : "figures") match Tally's data",
+            Label(report.verified.isEmpty ? "No figures to check" : "\(report.verified.count) \(report.verified.count == 1 ? "figure matches" : "figures match") Tally's data",
                   systemImage: "checkmark.seal.fill")
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(TallyTheme.positive)

@@ -156,7 +156,7 @@ The `-demoData` launch argument seeds six months of fictional finances (salary, 
 
 ## Quality
 
-- **94 Swift Testing tests** across the packages and the app: Money rounding and overflow, FX cross rates, recurrence across DST in both directions and across time zones, CSV edge cases, the exact output of every Ask Tally tool, the grounding validator, categoriser precedence, budget alerts and entitlement rules. A further 3 run real StoreKit purchases, expiries and refunds from Xcode.
+- **94 Swift Testing tests** across the packages and the app: Money rounding and overflow, FX cross rates, recurrence across DST in both directions and across time zones, CSV edge cases, the exact output of every Ask Tally tool, the grounding validator, categoriser precedence, budget alerts and entitlement rules. A further 3 StoreKitTest cases cover purchase, expiry and refund; they need Xcode's local StoreKit environment, so they are skipped on the command line and in CI.
 - **2 UI tests** that add the widget and log a purchase from it, and add the Control Center control and open quick add with it.
 - **Zero warnings** under Swift 6 strict concurrency with warnings as errors in every target, and `swiftlint lint --strict` clean.
 - **Money is never `Double`.** Integer minor units with ISO 4217 exponents and an explicit, tested rounding policy.
