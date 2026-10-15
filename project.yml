@@ -1,0 +1,104 @@
+name: Tally
+
+options:
+  bundleIdPrefix: com.owaismunawar
+  deploymentTarget:
+    iOS: "26.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+  generateEmptyDirectories: false
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
+    GCC_TREAT_WARNINGS_AS_ERRORS: YES
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    DEAD_CODE_STRIPPING: YES
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    TARGETED_DEVICE_FAMILY: "1"
+    # No team is committed. Simulator builds sign locally; for a device, set
+    # DEVELOPMENT_TEAM in Xcode or pass it to xcodebuild.
+    CODE_SIGN_STYLE: Automatic
+    DEVELOPMENT_TEAM: ""
+    # CloudKit sync is opt-in. To enable it, add TALLY_CLOUDKIT here, set a team,
+    # and add the iCloud entitlements described in docs/ARCHITECTURE.md (ADR-006).
+    SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited)
+
+packages:
+  TallyCore:
+    path: Packages/TallyCore
+  TallyData:
+    path: Packages/TallyData
+  TallyIntelligence:
+    path: Packages/TallyIntelligence
+  TallyUI:
+    path: Packages/TallyUI
+
+targets:
+  Tally:
+    type: application
+    platform: iOS
+    sources:
+      - App
+      - Shared
+    dependencies:
+      - package: TallyCore
+      - package: TallyData
+      - package: TallyIntelligence
+      - package: TallyUI
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.owaismunawar.tally
+        PRODUCT_NAME: Tally
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+      configs:
+        Debug:
+          SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) DEBUG
+    info:
+      path: App/Info.plist
+      properties:
+        CFBundleDisplayName: Tally
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        ITSAppUsesNonExemptEncryption: false
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        NSFaceIDUsageDescription: Tally uses Face ID to keep your finances locked when you leave the app.
+        LSSupportsOpeningDocumentsInPlace: false
+        CFBundleURLTypes:
+          - CFBundleURLName: com.owaismunawar.tally
+            CFBundleURLSchemes:
+              - tally
+    entitlements:
+      path: App/Tally.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.owaismunawar.tally
+
+schemes:
+  Tally:
+    build:
+      targets:
+        Tally: all
+    run:
+      config: Debug
+      storeKitConfiguration: Config/Tally.storekit
+      commandLineArguments:
+        "-demoData": true
+    test:
+      config: Debug
+      gatherCoverageData: true
+      targets:
+        - package: TallyCore/TallyCoreTests
+        - package: TallyData/TallyDataTests
+        - package: TallyIntelligence/TallyIntelligenceTests
+    archive:
+      config: Release
+

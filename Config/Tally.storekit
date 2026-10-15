@@ -1,0 +1,92 @@
+{
+  "identifier" : "5D2B7A19",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+
+    ]
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21600301",
+      "localizations" : [
+
+      ],
+      "name" : "Tally Plus",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "29.99",
+          "familyShareable" : true,
+          "groupNumber" : 1,
+          "internalID" : "6741000301",
+          "introductoryOffer" : {
+            "internalID" : "6741000303",
+            "numberOfPeriods" : 1,
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P2W"
+          },
+          "localizations" : [
+            {
+              "description" : "Ask Tally, CSV import and unlimited budgets, billed yearly.",
+              "displayName" : "Tally Plus Yearly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.owaismunawar.tally.plus.yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Tally Plus Yearly",
+          "subscriptionGroupID" : "21600301",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "3.99",
+          "familyShareable" : true,
+          "groupNumber" : 2,
+          "internalID" : "6741000302",
+          "localizations" : [
+            {
+              "description" : "Ask Tally, CSV import and unlimited budgets, billed monthly.",
+              "displayName" : "Tally Plus Monthly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.owaismunawar.tally.plus.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Tally Plus Monthly",
+          "subscriptionGroupID" : "21600301",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}
