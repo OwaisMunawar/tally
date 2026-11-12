@@ -79,7 +79,7 @@ jobs:
             build test | tee build/xcodebuild.log | grep -E "error:|warning:|Test run|\*\* (BUILD|TEST)"
       - name: Upload test results
         if: failure()
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: xcresult
           path: build/Tally.xcresult
