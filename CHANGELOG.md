@@ -22,4 +22,4 @@ All notable changes to Tally are documented here. The format follows
 - Tally Plus via StoreKit 2 `SubscriptionStoreView`, with entitlements derived from `Transaction.currentEntitlements`.
 - `-demoData` launch argument with six months of fictional data across three accounts and two currencies.
 
-[0.1.0]: https://github.com/OwaisMunawar/tally/releases/tag/0.1.0
+[0.1.0]: https://github.com/OwaisMunawar/tally/releases/tag/v0.1.0
